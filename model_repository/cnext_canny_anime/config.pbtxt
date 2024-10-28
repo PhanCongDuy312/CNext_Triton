@@ -1,0 +1,28 @@
+name: "cnext_canny_anime"
+backend: "onnxruntime"
+max_batch_size: 0
+
+input [
+  {
+    name: "timestep"
+    data_type: TYPE_FP32
+    dims: [1]  # Fixed batch size
+  },
+  {
+    name: "controlnext_image"
+    data_type: TYPE_FP32
+    dims: [-1, 3, -1, -1]  # Dynamic batch size, 3 channels, dynamic height, width
+  }
+]
+
+instance_group [
+  {
+    kind: KIND_CPU
+  }
+]
+
+optimization { execution_accelerators {
+  cpu_execution_accelerator : [ {
+    name : "openvino"
+  }]
+}}

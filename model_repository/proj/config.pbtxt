@@ -1,0 +1,31 @@
+name: "proj"
+backend: "onnxruntime"
+max_batch_size: 0
+
+input [
+  {
+    name: "clip_image_embeds"
+    data_type: TYPE_FP32
+    dims: [-1, -1] 
+  }
+]
+
+output [
+  {
+    name: "image_prompt_embeds"
+    data_type: TYPE_FP32
+    dims: [-1, 4, 2048] 
+  }
+]
+
+instance_group [
+  {
+    kind: KIND_CPU
+  }
+]
+
+optimization { execution_accelerators {
+  cpu_execution_accelerator : [ {
+    name : "openvino"
+  }]
+}}

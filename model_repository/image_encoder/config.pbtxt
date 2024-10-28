@@ -1,0 +1,31 @@
+name: "image_encoder"
+backend: "onnxruntime"
+max_batch_size: 0
+
+input [
+  {
+    name: "image_embedding"
+    data_type: TYPE_FP32
+    dims: [-1, -1, -1, -1]  
+  }
+]
+
+output [
+  {
+    name: "image_encoder"
+    data_type: TYPE_FP32
+    dims: [-1, 1280]  
+  }
+]
+
+instance_group [
+  {
+    kind: KIND_CPU
+  }
+]
+
+optimization { execution_accelerators {
+  cpu_execution_accelerator : [ {
+    name : "openvino"
+  }]
+}}

@@ -1,0 +1,49 @@
+name: "unet"
+backend: "onnxruntime"
+max_batch_size: 0
+
+input [
+  {
+    name: "control_out"
+    data_type: TYPE_FP32
+    dims: [-1, 320, 128, 128]  # Dynamic batch size
+  },
+  {
+    name: "encoder_hidden_state"
+    data_type: TYPE_FP32
+    dims: [-1, -1, -1]  # Dynamic batch size
+  },
+  {
+    name: "sample"
+    data_type: TYPE_FP32
+    dims: [-1, 4, 128, 128]  # Dynamic batch size
+  },
+  {
+    name: "timestep"
+    data_type: TYPE_FP32
+    dims: [1]  # Dynamic batch size
+  },
+  {
+    name: "control_scale"
+    data_type: TYPE_FP32
+    dims: [1]  # Dynamic batch size
+  }
+]
+output [
+  {
+    name: "predict_noise"
+    data_type: TYPE_FP32
+    dims: [-1, 4, 128, 128]  # Dynamic batch size
+  }
+]
+instance_group [
+  {
+    kind: KIND_CPU
+  }
+]
+
+optimization { execution_accelerators {
+  cpu_execution_accelerator : [ {
+    name : "openvino"
+  }]
+}}
